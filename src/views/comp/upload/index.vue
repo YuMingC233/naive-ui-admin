@@ -22,17 +22,26 @@
             </n-form-item>
 
             <n-form-item label="病例图片" path="images">
+              <!--
+              排除变量，直接使用原生组件实现
               <BasicUpload
-                :action="`${uploadUrl}/v1.0/files`"
-                :headers="uploadHeaders"
-                :data="{ type: 0 }"
-                name="files"
+                :action="`${uploadUrl}/api/image.ali`"
                 :width="100"
                 :height="100"
                 @upload-change="uploadChange"
                 v-model:value="formValue.images"
                 helpText="单个文件不超过2MB，最多只能上传10个文件"
-              />
+              />-->
+              <!-- 原生组件可以正确执行后续发布流程 -->
+              <n-upload
+                v-model:file-list="formValue.images"
+                list-type="image-card"
+                accept=".jpg,.jpeg,.png,.svg,.webp,.jfif"
+                :max="1"
+                :action="`${uploadUrl}/api/image.ali`"
+              >
+                点击上传
+              </n-upload>
             </n-form-item>
             <div style="margin-left: 80px">
               <n-space>
@@ -82,13 +91,7 @@
     name: '',
     mobile: '',
     //图片列表 通常查看和编辑使用 绝对路径 | 相对路径都可以
-    images: ['https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png'],
-  });
-
-  const uploadHeaders = reactive({
-    platform: 'miniPrograms',
-    timestamp: new Date().getTime(),
-    token: 'Q6fFCuhc1vkKn5JNFWaCLf6gRAc5n0LQHd08dSnG4qo=',
+    images: [],
   });
 
   function formSubmit() {
